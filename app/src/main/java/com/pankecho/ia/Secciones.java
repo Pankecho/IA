@@ -43,66 +43,62 @@ public class Secciones {
             }
     }
 
-    public void capa(int matriz[][],int i,int j){
-        if(j-1>-1&&j+1<matriz[0].length&&i-1>-1){
+    public void capa(int matriz[][],int i,int j) {
+        if (j - 1 > -1 && j + 1 < matriz[0].length && i - 1 > -1) {
 
-            if(matriz[i][j]!=0)
-                if(matriz[i][j-1]==0&&matriz[i-1][j]==0&&matriz[i-1][j+1]==0){
-                    matriz[i][j]=contador;
+            if (matriz[i][j] != 0)
+                if (matriz[i][j - 1] == 0 && matriz[i - 1][j] == 0 && matriz[i - 1][j + 1] == 0) {
+                    matriz[i][j] = contador;
                     contador++;
-                }else{
-                    matriz[i][j]=((matriz[i][j-1]>0)? matriz[i][j-1]:matriz[i][j]);
+                } else {
+                    matriz[i][j] = ((matriz[i][j - 1] > 0) ? matriz[i][j - 1] : matriz[i][j]);
 
-                    matriz[i][j]=((matriz[i-1][j]>0)? matriz[i-1][j]:matriz[i][j]);
+                    matriz[i][j] = ((matriz[i - 1][j] > 0) ? matriz[i - 1][j] : matriz[i][j]);
 
-                    matriz[i][j]=((matriz[i-1][j+1]>0)?matriz[i-1][j+1]:matriz[i][j]);
-                    cambiar(matriz[i][j],matriz[i][j-1]);
-                    cambiar(matriz[i][j],matriz[i-1][j]);
-                    cambiar(matriz[i][j],matriz[i-1][j+1]);
+                    matriz[i][j] = ((matriz[i - 1][j + 1] > 0) ? matriz[i - 1][j + 1] : matriz[i][j]);
+                    cambiar(matriz[i][j], matriz[i][j - 1]);
+                    cambiar(matriz[i][j], matriz[i - 1][j]);
+                    cambiar(matriz[i][j], matriz[i - 1][j + 1]);
                 }
-        }
-        else
-        if(j-1>-1&&i-1>-1){
+        } else if (j - 1 > -1 && i - 1 > -1) {
 
-            if(matriz[i][j]!=0)
-                if(matriz[i][j-1]==0&&matriz[i-1][j]==0){
-                    matriz[i][j]=contador;
+            if (matriz[i][j] != 0)
+                if (matriz[i][j - 1] == 0 && matriz[i - 1][j] == 0) {
+                    matriz[i][j] = contador;
                     contador++;
-                }else{
-                    matriz[i][j]=((matriz[i][j-1]>0)? matriz[i][j-1]:matriz[i][j]);
+                } else {
+                    matriz[i][j] = ((matriz[i][j - 1] > 0) ? matriz[i][j - 1] : matriz[i][j]);
 
-                    matriz[i][j]=((matriz[i-1][j]>0)? matriz[i-1][j]:matriz[i][j]);
-                    cambiar(matriz[i][j],matriz[i][j-1]);
-                    cambiar(matriz[i][j],matriz[i-1][j]);
+                    matriz[i][j] = ((matriz[i - 1][j] > 0) ? matriz[i - 1][j] : matriz[i][j]);
+                    cambiar(matriz[i][j], matriz[i][j - 1]);
+                    cambiar(matriz[i][j], matriz[i - 1][j]);
                 }
 
-        }
-        else
-        if(j-1>-1){
+        } else if (j - 1 > -1) {
 
-            if(matriz[i][j]!=0)
-                if(matriz[i][j-1]==0){
-                    matriz[i][j]=contador;
+            if (matriz[i][j] != 0)
+                if (matriz[i][j - 1] == 0) {
+                    matriz[i][j] = contador;
                     contador++;
-                }else{
-                    matriz[i][j]=((matriz[i][j-1]>0)? matriz[i][j-1]:matriz[i][j]);
-                    cambiar(matriz[i][j],matriz[i][j-1]);
+                } else {
+                    matriz[i][j] = ((matriz[i][j - 1] > 0) ? matriz[i][j - 1] : matriz[i][j]);
+                    cambiar(matriz[i][j], matriz[i][j - 1]);
                 }
-
-        }
-        else
-        if(j+1<matriz[0].length&&i-1>-1){
-            if(matriz[i][j]!=0)
-                if(matriz[i-1][j]==0&&matriz[i-1][j+1]==0){
-                    matriz[i][j]=contador;
+        } else if (j + 1 < matriz[0].length && i - 1 > -1) {
+            if (matriz[i][j] != 0)
+                if (matriz[i - 1][j] == 0 && matriz[i - 1][j + 1] == 0) {
+                    matriz[i][j] = contador;
                     contador++;
-                }else{
-                    matriz[i][j]=((matriz[i-1][j]>0)? matriz[i-1][j]:matriz[i][j]);
-
-                    matriz[i][j]=((matriz[i-1][j+1]>0)? matriz[i-1][j+1]:matriz[i][j]);
-                    cambiar(matriz[i][j],matriz[i-1][j]);
-                    cambiar(matriz[i][j],matriz[i-1][j+1]);
+                } else {
+                    matriz[i][j] = ((matriz[i - 1][j] > 0) ? matriz[i - 1][j] : matriz[i][j]);
+                    matriz[i][j] = ((matriz[i - 1][j + 1] > 0) ? matriz[i - 1][j + 1] : matriz[i][j]);
+                    cambiar(matriz[i][j], matriz[i - 1][j]);
+                    cambiar(matriz[i][j], matriz[i - 1][j + 1]);
                 }
         }
+    }
+
+    public int[][] getMatrix(){
+        return matriz;
     }
 }

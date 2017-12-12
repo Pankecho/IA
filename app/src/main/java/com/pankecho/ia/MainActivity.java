@@ -1,21 +1,36 @@
 package com.pankecho.ia;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStreamWriter;
 
 public class MainActivity extends AppCompatActivity {
+
+    private String m_Text = "";
+    private AlertDialog.Builder builder;
+    private EditText input;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        builder = new AlertDialog.Builder(this);
+        input = new EditText(this);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -31,8 +46,28 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 Secciones s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
-                 s.imprimir();
+            final Secciones s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
+            builder.setTitle("Title");
+
+            input.setInputType(InputType.TYPE_CLASS_TEXT);
+            builder.setView(input);
+
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    m_Text = input.getText().toString();
+                    writeFile(s.getMatrix(),pvg.getNumRows(),pvg.getNumColumns(),m_Text);
+                }
+            });
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            System.out.println(m_Text);
+            builder.show();
+
             }
         });
     }
@@ -57,5 +92,24 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void writeFile(int[][] matrix,int numRows, int numColumns,String nombre){
+        try {
+            nombre = nombre + ".txt";
+            File file = new File(getExternalFilesDir("MyFileStorage"),nombre);
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            String salto = new String("\n");
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numColumns; j++) {
+                    String nueva = new String("" + matrix[i][j]);
+                    fileOutput.write(nueva.getBytes());
+                }
+                fileOutput.write(salto.getBytes());
+            }
+            fileOutput.close();
+        }catch (Exception e){
+
+        }
     }
 }

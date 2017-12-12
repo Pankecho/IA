@@ -8,6 +8,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 /**
  * Created by pankecho on 05/12/17.
  */
@@ -107,5 +112,24 @@ public class PixelViewGrid extends View {
 
     public boolean [][] getMatriz(){
         return cellChecked;
+    }
+
+    public void writeFile(Context c,int [][] matrix,String nombre){
+        File path = c.getFilesDir();
+        File file = new File(path,nombre + ".txt");
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numColumns; j++) {
+                    stream.write(matrix[i][j]);
+                }
+                stream.write("\n".getBytes());
+            }
+            stream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
