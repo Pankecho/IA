@@ -33,4 +33,14 @@
         app:rippleColor="@android:color/background_light"
         app:srcCompat="@android:drawable/ic_menu_search" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/entrenar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:backgroundTint="@android:color/holo_blue_bright"
+        app:layout_anchor="@+id/lay"
+        app:layout_anchorGravity="left|bottom"
+        app:srcCompat="@android:drawable/ic_input_add" />
+
 </android.support.design.widget.CoordinatorLayout>

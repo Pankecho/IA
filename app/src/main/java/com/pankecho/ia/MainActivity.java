@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     private String m_Text = "";
     private AlertDialog.Builder builder;
     private EditText input;
+    private Secciones s;
 
 
     @Override
@@ -46,28 +47,33 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            final Secciones s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
-            builder.setTitle("Title");
+                s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
+            }
+        });
 
-            input.setInputType(InputType.TYPE_CLASS_TEXT);
-            builder.setView(input);
+        FloatingActionButton entrenar = (FloatingActionButton) findViewById(R.id.entrenar);
+        entrenar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                builder.setTitle("Nombre del archivo");
 
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    m_Text = input.getText().toString();
-                    writeFile(s.getMatrix(),pvg.getNumRows(),pvg.getNumColumns(),m_Text);
-                }
-            });
-            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.cancel();
-                }
-            });
-            System.out.println(m_Text);
-            builder.show();
+                input.setInputType(InputType.TYPE_CLASS_TEXT);
+                builder.setView(input);
 
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        m_Text = input.getText().toString();
+                        writeFile(s.getMatrix(),pvg.getNumRows(),pvg.getNumColumns(),m_Text);
+                    }
+                });
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+                builder.show();
             }
         });
     }
