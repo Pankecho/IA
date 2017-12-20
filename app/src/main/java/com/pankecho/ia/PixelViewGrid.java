@@ -56,7 +56,8 @@ public class PixelViewGrid extends View {
         calculateDimensions();
     }
 
-    private void calculateDimensions() {
+    public void calculateDimensions() {
+        System.out.println(numRows + " - " + numColumns);
         if (numColumns < 1 || numRows < 1) {
             return;
         }
@@ -64,7 +65,7 @@ public class PixelViewGrid extends View {
         cellWidth = getWidth() / numColumns;
         cellHeight = cellWidth;
 
-        cellChecked = new boolean[numColumns][numRows];
+        cellChecked = new boolean[numRows][numColumns];
 
         invalidate();
     }
@@ -82,7 +83,7 @@ public class PixelViewGrid extends View {
 
         for (int i = 0; i < numColumns; i++) {
             for (int j = 0; j < numRows; j++) {
-                if (cellChecked[i][j]) {
+                if (cellChecked[j][i]) {
                     canvas.drawRect(i * cellWidth, j * cellHeight,
                             (i + 1) * cellWidth, (j + 1) * cellHeight,
                             blackPaint);
@@ -104,7 +105,7 @@ public class PixelViewGrid extends View {
             int column = (int)(event.getX() / cellWidth);
             int row = (int)(event.getY() / cellHeight);
 
-            cellChecked[column][row] = true;
+            cellChecked[row][column] = true;
             invalidate();
         }
         return true;
@@ -112,24 +113,5 @@ public class PixelViewGrid extends View {
 
     public boolean [][] getMatriz(){
         return cellChecked;
-    }
-
-    public void writeFile(Context c,int [][] matrix,String nombre){
-        File path = c.getFilesDir();
-        File file = new File(path,nombre + ".txt");
-        try {
-            FileOutputStream stream = new FileOutputStream(file);
-            for (int i = 0; i < numRows; i++) {
-                for (int j = 0; j < numColumns; j++) {
-                    stream.write(matrix[i][j]);
-                }
-                stream.write("\n".getBytes());
-            }
-            stream.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }

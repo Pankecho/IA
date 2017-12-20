@@ -15,49 +15,71 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import Clases.BackPropagation;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Secciones s;
+    private BackPropagation bp;
     private String m_Text = "";
     private AlertDialog.Builder builder;
     private EditText input;
-    private Secciones s;
-    ArrayList<String[]> patrones;
-    String[][] matriz;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         builder = new AlertDialog.Builder(this);
         input = new EditText(this);
-        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         final PixelViewGrid pvg = new PixelViewGrid(this);
-        pvg.setNumColumns(20);
-        pvg.setNumRows(40);
+        pvg.setNumColumns(40);
+        pvg.setNumRows(20);
         pvg.setLayoutParams(new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         ConstraintLayout l = (ConstraintLayout) findViewById(R.id.lay);
         l.addView(pvg);
+
+        try{
+            InputStream fis = getResources().openRawResource(R.raw.back);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            bp = (BackPropagation) ois.readObject();
+            ois.close();
+            showToast("Red cargada correctamente");
+        }catch(Exception e){
+            showToast("Hubo un error al cargar la red");
+        }
+
+
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
+                String cadena = "";
+                double[][] mat = s.armarMatriz();
+                for (int i = 0; i < mat.length; i++){
+                    cadena += s.convertir(bp.clasifica(mat[i]));
+                }
+                showToast("" + cadena);
             }
         });
 
@@ -65,33 +87,7 @@ public class MainActivity extends AppCompatActivity {
         entrenar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InputStream br = null;
-                patrones = new ArrayList<String[]>();
-                try{
-                    br = getResources().openRawResource(R.raw.patrones);
-                    BufferedReader lector = new BufferedReader(new InputStreamReader(br));
-                    String linea = lector.readLine();
-                    while(linea != null){
-                        String[] campos = linea.split(",");
-                        patrones.add(campos);
-                        linea = lector.readLine();
-                    }
-                    matriz = new String[patrones.size()][patrones.get(0).length];
-                    for(int i = 0; i < patrones.size(); i++){
-                        for(int j = 0; j < patrones.get(i).length; j++){
-                            matriz[i][j] = patrones.get(i)[j];
-                        }
-                    }
-                    br.close();
-                }catch (FileNotFoundException e){
-                    Log.d("Archivo :","No existe");
-                }catch (IOException e){
 
-                }
-                int[] capas = {804,20,20,1};
-                BackPropagation bp = new BackPropagation(capas,matriz,100,0.01);
-                NeuronResult nr = bp.entrenamiento();
-                Log.d("Total de aprendidos :","" + nr.aprendidos);
             }
         });
     }
@@ -116,5 +112,29 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void writeFile(int[][] matrix,int numRows, int numColumns,String nombre){
+        try {
+            nombre = nombre + ".txt";
+            File file = new File(getExternalFilesDir("MyFileStorage"),nombre);
+            FileOutputStream fileOutput = new FileOutputStream(file);
+            String salto = new String("\n");
+            for (int i = 0; i < numRows; i++) {
+                for (int j = 0; j < numColumns; j++) {
+                    String nueva = new String("" + matrix[i][j]);
+                    fileOutput.write(nueva.getBytes());
+                }
+                fileOutput.write(salto.getBytes());
+            }
+            fileOutput.close();
+        }catch (Exception e){
+
+        }
+    }
+
+    public void showToast(CharSequence mensaje){
+        Toast toast = Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
