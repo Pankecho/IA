@@ -76,18 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 s = new Secciones(pvg.getMatriz(),pvg.getNumRows(),pvg.getNumColumns());
                 String cadena = "";
                 double[][] mat = s.armarMatriz();
-                for (int i = 0; i < mat.length; i++){
+                for (int i = 0; i < mat.length; i++) {
                     cadena += s.convertir(bp.clasifica(mat[i]));
                 }
                 showToast("" + cadena);
-            }
-        });
-
-        FloatingActionButton entrenar = (FloatingActionButton) findViewById(R.id.entrenar);
-        entrenar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
             }
         });
     }
